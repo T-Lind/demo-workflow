@@ -1,4 +1,4 @@
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
   commit-check:
@@ -25,7 +25,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Apply Code Formatting
-        run: ./gradlew spotlessApply
-
-
+      # Optional but recommended - allows you to test small parts, will throw assertion error if it doesn't work
+      - name: Run Unit Tests
+        run: ./gradlew test
