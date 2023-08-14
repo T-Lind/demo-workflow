@@ -4,9 +4,11 @@ jobs:
   commit-check:
     runs-on: ubuntu-latest
     steps:
+      # Must checkout the code first
       - name: Checkout code
         uses: actions/checkout@v2
 
+      # Gives execute permission to gradlew
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
