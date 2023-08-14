@@ -17,7 +17,6 @@ public class CalculatorTest {
 
         /*
          * This test will pass, because 2 + 3 is 5.
-         * You'll see a success message in "Build with Gradle" like "Task :test SUCCESS"
          */
         assertEquals(5, calculator.add(2, 3));
     }
