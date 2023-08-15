@@ -1,32 +1,51 @@
 package com.github.tlind.lqr;
 
+/**
+ * Represents a simplified model of a motor-wheel system for control applications.
+ */
 public class MotorWheelSystemModel {
     private final double[][] A;
     private final double[][] B;
     private final double[][] C;
 
+    /**
+     * Constructs a MotorWheelSystemModel with specified parameters.
+     *
+     * @param motorConstant   The motor constant of the system.
+     * @param momentOfInertia The moment of inertia of the system.
+     * @param wheelRadius     The radius of the wheel.
+     * @param motorResistance The resistance of the motor.
+     */
     public MotorWheelSystemModel(double motorConstant, double momentOfInertia, double wheelRadius, double motorResistance) {
         // State-space matrices
-        A = new double[][] {
+        A = new double[][]{
                 {-motorResistance / momentOfInertia, 0},
                 {1 / wheelRadius, 0}
         };
 
-        B = new double[][] {
+        B = new double[][]{
                 {motorConstant / momentOfInertia},
                 {0}
         };
 
-        C = new double[][] {
+        C = new double[][]{
                 {0, 1}
         };
     }
 
+    /**
+     * Computes the next state of the system given the current state, motor power, and output.
+     *
+     * @param state      The current state of the system.
+     * @param motorPower The motor power applied to the system.
+     * @param output     The output of the system (angle, encoder ticks,etc.).
+     * @return The updated state of the system.
+     */
     public double[] getStateUpdate(double[] state, double motorPower, double output) {
         double[] controlInput = {motorPower};
 
         // Feedback mechanism: Adjust the state update based on the output
-        double[] feedback = {output * 0.01, output * 0.01}; // Feedback scaling factor (adjust as needed)
+        double[] feedback = {output * 0.3, output * 0.3}; // Feedback scaling factor (adjust as needed)
         double[] nextState = matrixVectorMultiply(A, state);
         nextState = vectorAdd(nextState, matrixVectorMultiply(B, controlInput));
         nextState = vectorAdd(nextState, feedback);
@@ -34,9 +53,19 @@ public class MotorWheelSystemModel {
         return nextState;
     }
 
+    /**
+     * Computes the output of the system given the current state.
+     *
+     * @param state The current state of the system.
+     * @return The output of the system.
+     */
     public double[] getOutput(double[] state) {
         return matrixVectorMultiply(C, state);
     }
+
+    /*
+     * The following methods are helper methods for matrix and vector operations.
+     */
 
     private double[] matrixVectorMultiply(double[][] matrix, double[] vector) {
         int numRows = matrix.length;
